@@ -1,0 +1,19 @@
+# Eclipse
+*.classpath
+*.project
+*.settings/
+bin/
+build/
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

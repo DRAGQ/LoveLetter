@@ -1,0 +1,79 @@
+-pri vyhre nejakeho hraca tak resetovat vsetky panely prehratych hracov aby boli znova priehladne   -------- otestovat
+-ked dam novu hru a dam esc, takze menu je otvorene a pockam aby round obrazok zmizol a vtedy dam pred esc menu tak shadowpane ostane zapnuty
+
+
+- teoreticky pri guardovi mozem napisat ci hrac uhadol alebo nie
+
+-ked som porovnaval karty 3 ludom tak nevidel som panel 3. hraca / tretej karty iba prvych 2 hracov    ------------- malo by to uz fungovat
+
+- obmedzit asi aj dlzku mena ked tak pozriet ako sa to bude chovat dole v hracovom panely a potom aj vo vysledkovej tabuli -------- aj to mozem nechat alebo pripadne obmedzit na 13
+
+-*pri bvaronovi oznacit ktory hrac mal vyssiu kartu ked sa ukazu v strede  ------------- funguje
+
+-upravim asi full screen na moj monitor aby to nebolo divne pri inej obrazovke
+
+-ked zahram na seba princa tak mozem dat trochu delay aby  instatne hned hrac nedobral kartu  --------- funguje
+
+-ked princom vyhodim svoju princeznu tak mam error screensho je na ploche oznaceny ako error ----------- uz nemam error
+
+-pri vyhre na body ukazat karty ktore sa porovnavaju mozu byt 2 az 4 ------------ uz ide
+
+- ak je viac hracov s vyssou kartou tak zvyraznit tie karty a napisat draw! tu nedostane body nikto ------------ treba otestovat
+- po oboch moznostiach ako sa karta/y zvyrazni tak spustim aj nejaky timer na zatvorenie a pokracuje sa dalej v hre 
+
+-teoreticky pri kingovi ked ukazem 2 tie karty by som mohol pridat efekt toho ze si vymenia pozicie s tym ze mena hracov ostanu na svojom mieste --------- ide
+
+
+esc listener
+--pridat pravidla.
+-bude to nejaky panel ktory sa bude dat scrolovat alebo nejaky subor.
+
+poriesit remizu v gui lebo ked je remiza tak zacne hned nova hra, hra sa resetne automaticky ale neukaze DRAW NO WINNER !
+
+specificCard = rozlisuje karty rovnakeho vzoru
+
+ked chcem pouzit kantesu a mam princa alebo kinga tak napisat ze ju nemozem vyhodit
+ked vyberiem kartu tak aj napisat aku kartu som vybral
+
+
+Vzdy v done skontrolovat celkoveho vytaza
+1. karta je secrete, potom ak su 2 hraci 3 karty idu bokom ale je ich vidiet
+Ak su v hre 2 hraci pri rozdavani odhodim 3 hracie karty bokom, tie musim ukazat v gui
+2 hraci 7 bodov
+3 hraci 5 bodov
+4 hraci 4 body
+
+a treba ked niekto dosiahne dostatocny pocet hlasov tak aby ukazalo jeho vyhru, skore vsetkych hracov a ich poradie
+
+zistit ako urobit full screen
+mozno by som mal dat potom moznost urobit aj mensie okno keby to je na velkej obrazovke
+
+control panel - number of cards mat v 1. riadku a vyhodene karty v 2. riadku
+				prve 3 vyhodene karty - urobit 3 buttony kde budu iba cisla a po kliknuti na jedno z nich ukaze v strede celu kartu a po kliknuti mimo nej zase zmizne,
+				takze zistit od chatgbt ako urobit to ze ked kliknem mimo kartu, tak aby len zmizla ale nemalo to efekt na ostatne cinnosti napr. na vyber karty alebo supera,..
+				tak najskor spravim aby fungoval aspon zaklad a az potom budem riesit ten zvysok
+				
+urobit nejaky delay po tom ako urobim efekt karty nech to nie je ihned lebo to vyzera divne
+
+player panel - mohol by som hore zvyraznit meno hraca ktory je aktualna narade
+
+
+zvlast farby pre kazde okno vyriesim az ked sa nebude nejako menit ich velkost pocas hry, takze to vyskusam so vsetkym poctom hracov
+kazdy hrac by mohol mat svoju farbu aby sa nemylili karty to este otestujem mozno to nebude treba a bude to vzdy dostatocne oddelene
+do stredu napr. napisat game started, choose kart below you want to play
+
+pridat nejaky otaznik hore alebo nieco kde by sa dali pozriet pravidla hry. to by malo byt aj pri starte hry nez vyberiem pocet hracov
+
+
+
+HOTOVO!(nerobil som skusku) ked niesu karty a pouyiyijem princa tak pouzit secret card
+
+
+shadow pane start/end
+
+-chcelo by to vyriesit aby bol vzdy na rovnakej urovni
+-v metodach ked chcem zapnut sp tak zavolam nejaku metodu ako activateShadowPane a tiez nastavim nejaku boolean premennu napr. isRoundImage = true; toto urobim zvlast
+pre kazdu jednu vec co vola shadow pane a ked sa dana vec skonci tak ju nastavim na false. 
+-teraz ked na konci kazdej veci co zavolala shadow pane a chce ju zavriet teraz tak zavolam metodu closeShadowPane kde sa skontroluju vsetky boolean premenne ci nahodou 
+nieco ine akurat nepouziva shadow pane
+- mozno nan urobim vlastnu classu, uvidim este
