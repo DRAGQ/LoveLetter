@@ -17,6 +17,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -33,7 +34,8 @@ public class GameGui {
 	private JPanel numberOfCardsPanel, firstThreeCardsPanel, playersTopPanel, playersBottomPanel, playerNamePanel, activePlayerCardsPanel, scoreboardPanel;
 	private JPanel guardGuessPanel, cardsToComparePanel;
 	private ShadowPane shadowPane;
-	private JLabel bcgNameImage, numberOfCardsInt, secretCard, playerLabel, card1, card2, scoreboardImage;
+	private JLabel bcgNameImage, numberOfCardsInt, secretCard, playerLabel, card1, card2, backCard1, backCard2, scoreboardImage;
+	private JButton showHideButton;
 	private String activePlayerName, card1Name, card2Name;
 	private int gameHeight, gameWidth, numberOfPlayers, currentPlayerIndex, card1Rank, availablePlayersForCardIndex;
 	private static boolean isSecretCard;
@@ -98,9 +100,7 @@ public class GameGui {
 			updatePane();
 			
 			Timer timer = new Timer(2500, e -> {
-				if (!escMenu.getIsMenuOpened()) {
-					this.shadowPane.decreaseCount();
-				}
+				this.shadowPane.decreaseCount();
 				layeredPane.remove(roundImage);
 				layeredPane.remove(roundNumberLabel);
 				escMenu.clearComponentToHide();
@@ -139,8 +139,8 @@ public class GameGui {
 		setUpForTwoPlayers();	
 		
 		startGameBackend();
-		
 		createPlayersPanel();
+		createShowHideButton();
 
 		this.frame.revalidate();
 		this.frame.repaint();
@@ -217,6 +217,27 @@ public class GameGui {
 			this.playersPanel.add(playerGui);
 			this.playersTopPanel.add(playerGui.getPlayerPanel(), gbc);
 		}
+	}
+	
+	private void createShowHideButton() {
+		this.showHideButton = new JButton("SHOW");
+		this.showHideButton.setBounds(870, 1000, 200, 40);
+		this.showHideButton.addActionListener(e -> {
+			if (this.showHideButton.getText().equals("SHOW")) {
+				card1.setVisible(true);
+				card2.setVisible(true);
+				this.backCard1.setVisible(false);
+				this.backCard2.setVisible(false);
+				this.showHideButton.setText("HIDE");
+			} else {
+				card1.setVisible(false);
+				card2.setVisible(false);
+				this.backCard1.setVisible(true);
+				this.backCard2.setVisible(true);
+				this.showHideButton.setText("SHOW");
+			}
+		});
+		layeredPane.add(showHideButton);
 	}
 	
 	public void restartGame() {
@@ -321,13 +342,21 @@ public class GameGui {
 		int cardWidth = 150;
 	    int cardHeight = 210;
 	    
+	    this.backCard1 = createJLabelForCard("backCardToggle", 0, 0);
+		this.backCard2 = createJLabelForCard("backCardToggle", cardWidth + 20, 0);
+	    
 		this.card1 = createJLabelForCard(card1Name, 0, 0);
 		this.card2 = createJLabelForCard(card2Name, cardWidth + 20, 0);
+		
+		this.card1.setVisible(false);
+		this.card2.setVisible(false);
+		this.showHideButton.setText("SHOW");
 		
 		JLabel[] cards = {card1, card2};
 		String[] cardNames = {card1Name, card2Name};
 		int[] xPositions = {0, cardWidth + 20};
-		
+		System.out.println("LALALA");
+		System.out.println(this.availablePlayersForFirstCard);
 		List<List<Integer>> availablePlayers = List.of(this.availablePlayersForFirstCard, this.availablePlayersForSecondCard);
 		CardMouseMotionListener[] motionListeners = new CardMouseMotionListener[cards.length];
 		CardListenerContext cardContext = new CardListenerContext(this.layeredPane, this.activePlayerCardsPanel, this.playersPanel);
@@ -399,10 +428,12 @@ public class GameGui {
 			ArrayList<Integer> availablePlayers = (ArrayList<Integer>) allActivePlayers;
 			
 			if (this.availablePlayersForCardIndex == 0) {
+				this.availablePlayersForFirstCard = new ArrayList<>();
 				this.availablePlayersForFirstCard = availablePlayers;
 				this.availablePlayersForCardIndex = 1;
 			}
 			else if (this.availablePlayersForCardIndex == 1) {
+				this.availablePlayersForSecondCard = new ArrayList<>();
 				this.availablePlayersForSecondCard  = availablePlayers;
 				this.availablePlayersForCardIndex = 0;
 			}
@@ -469,7 +500,7 @@ public class GameGui {
 			List <Integer> indexes = (List<Integer>) playersIndexes;
 			System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: " + indexes);
 			//: Cannot invoke "java.util.List.get(int)" because "this.playersCardsList" is null
-			//problem je ze som predtym nevytboril this.playersCardsList treba to pozriet pri baranovi este raz
+			//problem je ze som predtym nevytboril this.playersCardsList treba to pozriet pri baronovi este raz
 			for (Integer index : indexes) {
 				playersCardsList.get(index).getComponent(0).setBackground(Color.RED);
 			}
@@ -480,25 +511,25 @@ public class GameGui {
 	public void updateWinner(Object winner) {
 		if (winner instanceof Player) {
 			Player player = (Player) winner;
-			playersPanel.get(player.getIndex()).updatePlayerScore(player.getScore()-1);
+			playersPanel.get(player.getIndex()).updatePlayerScore(player.getScore());
 			updatePane();
 		} else {
 	        System.out.println("Invalid input: winner is not instanceof Player");
 	    }
 	}
 	
-	public void createResultPanel(Object winOrDrawString) {
-		if (winOrDrawString instanceof String) {
-			String result = (String) winOrDrawString;
-			JLabel drawLabel = CustomTextFont.createFont(result);
-			JPanel drawPanel = new CenterPanelForLabel(drawLabel, 500, 30);
-			drawPanel.setBounds(gameWidth / 2 - 250, gameHeight / 2 - 15, 500, 30);
+	public void createResultPanel(Object winString) {
+		if (winString instanceof String) {
+			String winStr = (String) winString;
+			JLabel label = CustomTextFont.createFont(winStr);
+			JPanel panel = new CenterPanelForLabel(label, 500, 30);
+			panel.setBounds(gameWidth / 2 - 250, gameHeight / 2 - 15, 500, 30);
 			
 			this.shadowPane.addCount();
 			escMenu.setIsCardAction(true);
 			
-			layeredPane.add(drawPanel, JLayeredPane.POPUP_LAYER);	
-			setTimer(drawPanel, 2500);
+			layeredPane.add(panel, JLayeredPane.POPUP_LAYER);	
+			setTimer(panel, 2500);
 		}
 	}
 	

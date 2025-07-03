@@ -89,6 +89,14 @@ public class Player {
 		return playedCards.size();
 	}
 	
+	public int getValueOfPlayedCards() {
+		int value = 0;
+		for (Card card : playedCards) {
+			value += card.getRank();
+		}
+		return value;
+	}
+	
 	public synchronized void addPlayedCard(Card usedCard) {
 		playedCards.add(usedCard);
 		notifyAll();

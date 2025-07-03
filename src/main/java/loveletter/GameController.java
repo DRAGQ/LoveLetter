@@ -90,20 +90,26 @@ public class GameController implements GameEventListener, CardActionListener{
 				});
 				break;
 			case "All_ACTIVE_PLAYERS":
-				SwingUtilities.invokeLater(() -> {
-					gui.saveAllActivePlayersForEachCard(event.getEventData());
-				});
+				try {
+					SwingUtilities.invokeAndWait(() -> {
+						gui.saveAllActivePlayersForEachCard(event.getEventData());
+					});
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				break;
 			case "PLAYED_CARD":
-			try {
-				SwingUtilities.invokeAndWait(() -> {
-					gui.showPlayedCard(event.getEventData());
-				});
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+				try {
+					SwingUtilities.invokeAndWait(() -> {
+						gui.showPlayedCard(event.getEventData());
+					});
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				break;
 			case "CLEAR_BOARD":
 				SwingUtilities.invokeLater(() -> {
@@ -131,7 +137,7 @@ public class GameController implements GameEventListener, CardActionListener{
 					gui.showWinnerCard(event.getEventData());
 				});
 				break;
-			case "SHOW_RESULT_OF_ROUND":
+			case "WINNER_OF_ROUND":
 				SwingUtilities.invokeLater(() -> {
 					gui.createResultPanel(event.getEventData());
 				});

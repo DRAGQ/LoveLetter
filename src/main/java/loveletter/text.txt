@@ -1,3 +1,8 @@
+
+pri zaciatku hry by som mohol otvorit shadow pane a ukazat vsade popisky ze co je co a niekde dole by bol button na zatvorenie a potom by pokracovala hra normalne
+-musim ten shadow pane vyriesit ked na zaciatku dam esc a nezatvori sa
+
+
 -pri vyhre nejakeho hraca tak resetovat vsetky panely prehratych hracov aby boli znova priehladne   -------- otestovat
 -ked dam novu hru a dam esc, takze menu je otvorene a pockam aby round obrazok zmizol a vtedy dam pred esc menu tak shadowpane ostane zapnuty
 

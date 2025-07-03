@@ -152,11 +152,12 @@ public class Game {
 					
 					Game.this.addCardToPlayer(player);
 					
-					setupAvailablePlayersForEachCard();		
-					returnAvailablePlayers(availablePlayersForFirstCard, player, activePlayers, firstCardIndex);
-					returnAvailablePlayers(availablePlayersForSecondCard, player, activePlayers, secondCardIndex);
-					publish(new GameEvent("All_ACTIVE_PLAYERS", availablePlayersForFirstCard));
-					publish(new GameEvent("All_ACTIVE_PLAYERS", availablePlayersForSecondCard));
+					setupAvailablePlayersForEachCard(player, firstCardIndex, secondCardIndex);		
+					//returnAvailablePlayers(availablePlayersForFirstCard, player, activePlayers, firstCardIndex);
+					//returnAvailablePlayers(availablePlayersForSecondCard, player, activePlayers, secondCardIndex);
+					
+					//publish(new GameEvent("All_ACTIVE_PLAYERS", availablePlayersForFirstCard));
+					//publish(new GameEvent("All_ACTIVE_PLAYERS", availablePlayersForSecondCard));
 					
 					Thread.sleep(400);
 					renderCards(player.getIndex()); //render 2 cards to active player
@@ -286,11 +287,17 @@ public class Game {
 		}
 	}
 	
-	private void setupAvailablePlayersForEachCard() {
+	private void setupAvailablePlayersForEachCard(Player player, int firstCardIndex, int secondCardIndex) {
 		availablePlayersForFirstCard  = new ArrayList<>();
 		availablePlayersForSecondCard  = new ArrayList<>();
 		availablePlayersForFirstCard.removeAll(availablePlayersForFirstCard);
 		availablePlayersForSecondCard.removeAll(availablePlayersForSecondCard);
+		
+		returnAvailablePlayers(availablePlayersForFirstCard, player, activePlayers, firstCardIndex);
+		returnAvailablePlayers(availablePlayersForSecondCard, player, activePlayers, secondCardIndex);
+		
+		triggerEvent("All_ACTIVE_PLAYERS", availablePlayersForFirstCard);
+		triggerEvent("All_ACTIVE_PLAYERS", availablePlayersForSecondCard);
 	}
 	
 	public int getPlayerScore(String playerName) {
@@ -426,6 +433,9 @@ public class Game {
 		if (counter == 1) {
 			this.lastWonPlayer = winner;
 			winner.updateScore();
+			
+			triggerEvent("WINNER_OF_ROUND", winner.getName() + " IS WINNER !");
+			setTimer(3000);
 			triggerEvent("UPDATE_WINNER", winner);
 			
 			System.out.println("Player: " + winner.getName() + "is WINNER!!!!" + "His score is: " + winner.getScore());
@@ -441,8 +451,6 @@ public class Game {
 		return false;
 	}
 	private void checkWinnerByHighestCard(List<Player> activePlayers) {
-		System.out.println("ACTIVE PLAYERS ARE: " + activePlayers);
-		System.out.println("LENGHT: " + activePlayers.size());
 		List<Player> lastStandPlayers = new ArrayList<>();
 		
 		for (Player player : activePlayers) {
@@ -450,8 +458,6 @@ public class Game {
 				lastStandPlayers.add(player);
 			}
 		}
-		System.out.println("ACTIVE PLAYERS ARE st: " + lastStandPlayers);
-		System.out.println("LENGHT st: " + lastStandPlayers.size());
 		triggerEvent("SHOW_ALL_CARDS", lastStandPlayers);	
 		setTimer(1000);
 		
@@ -472,29 +478,43 @@ public class Game {
 			Player player = lastStandPlayers.get(i);
 			int playerCardRank = player.getCard(0).getRank();
 			if (playerCardRank == rank) {
-				System.out.println(player.getName());
 				winnersIndexes.add(i);
 				DrawPlayers.add(player);
 				numberOfCards++;
 			}
 		}
-		System.out.println("WINNER BY HIGHEST CARD IS: " + winnersIndexes);
+
 		//show highest card/s.
 		triggerEvent("SHOW_WINNER_CARD",  winnersIndexes);
 		setTimer(3000);
 		
-		if (numberOfCards == 1) {
+		/*if (numberOfCards == 1) {
 			winner.updateScore();
-			triggerEvent("SHOW_RESULT_OF_ROUND", winner.getName() + " IS WINNER !");
+			triggerEvent("WINNER_OF_ROUND", winner.getName() + " IS WINNER !");
+			setTimer(3000);
+			
+			triggerEvent("UPDATE_WINNER", winner);*/
+			System.out.println("Player: " + winner.getName() + "is Winner!" + "With Card rank: " + rank + "and score: " + winner.getScore());
+		//} else {
+			if (numberOfCards != 1) {
+			//
+			for (Player player : DrawPlayers) {
+				if (winner.getValueOfPlayedCards() < player.getValueOfPlayedCards()) {
+					winner = player;
+				}
+			}
+			/*winner.updateScore();
+			triggerEvent("UPDATE_WINNER", winner);
+			// to draw vymazat a miesto toho poslem winnera
+			triggerEvent("WINNER_OF_ROUND", " IS WINNER !");
+			setTimer(3000);*/
+		}
+			winner.updateScore();
+			triggerEvent("WINNER_OF_ROUND", winner.getName() + " IS WINNER !");
 			setTimer(3000);
 			
 			triggerEvent("UPDATE_WINNER", winner);
-			System.out.println("Player: " + winner.getName() + "is Winner!" + "With Card rank: " + rank + "and score: " + winner.getScore());
-		} else {
-			triggerEvent("SHOW_RESULT_OF_ROUND", " IT'S DRAW !");
-			setTimer(3000);
-		}
-		lastWonPlayer = winner;
+			lastWonPlayer = winner;
 	}
 	
 	private void setTimer(int time) {

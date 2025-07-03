@@ -22,6 +22,7 @@ public class EscMenuGui {
 	private GameGui gui;
 	private JFrame frame;
 	private JLayeredPane layeredPane;
+	private RulesPanel rulesPanel;
 	private JPanel menuPanel;
 	private static boolean isMenuOpened;
 	private JLabel zoomedCardImage, exitImage;
@@ -32,6 +33,7 @@ public class EscMenuGui {
 		this.gui = gui;
 		this.frame = gui.getFrame();
 		this.layeredPane = gui.getLayeredPane();
+		this.rulesPanel = new RulesPanel();
 		this.componentsToHide = new ArrayList<>();
 		this.isCardAction = false;
 		EscMenuGui.isMenuOpened = false;
@@ -78,11 +80,11 @@ public class EscMenuGui {
 			}
 		};
 		int xPosition = layeredPane.getWidth() / 2 - 200;
-		int yPosition = layeredPane.getHeight() / 2 - 117;
+		int yPosition = layeredPane.getHeight() / 2 - 145;
 
 		menuPanel.setBorder(BorderFactory.createLineBorder(Color.BLUE, 3));
 		menuPanel.setLayout(null);
-		menuPanel.setBounds(xPosition, yPosition, 400, 235);
+		menuPanel.setBounds(xPosition, yPosition, 400, 290);
 		
 		JButton resumeButton = new EscMenuButton("RESUME");
 		resumeButton.setBounds(75, 50, 250, 35);
@@ -100,11 +102,18 @@ public class EscMenuGui {
 				gui.restartGame();
 				resumeGame();
 			}
-		});	
+		});
 		
+		JButton rulesButton = new EscMenuButton("GAME RULES");
+		rulesButton.setBounds(75, 150, 250, 35);
+		rulesButton.addActionListener( new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				rulesPanel.showRules(frame);
+			}
+		});
 		
 		JButton exitButton = new EscMenuButton("EXIT");
-		exitButton.setBounds(75, 150, 250, 35);
+		exitButton.setBounds(75, 200, 250, 35);
 		exitButton.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
@@ -113,6 +122,7 @@ public class EscMenuGui {
 		
 		menuPanel.add(startNewGame);
 		menuPanel.add(resumeButton);
+		menuPanel.add(rulesButton);
 		menuPanel.add(exitButton);
 		layeredPane.add(menuPanel, JLayeredPane.DRAG_LAYER);
 	}

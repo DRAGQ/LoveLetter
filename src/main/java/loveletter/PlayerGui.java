@@ -125,8 +125,8 @@ public class PlayerGui{
 		this.playedCardsPanel.setTransparency(0f);
 	}
 	
-	public void updatePlayerScore(int score) {
-		heartLabels.get(score).setIcon(fullHeartIcon);
+	public void updatePlayerScore(int indexScore) {
+		heartLabels.get(indexScore - 1).setIcon(fullHeartIcon);
 	}
 	
 	private void addCharacter() {
